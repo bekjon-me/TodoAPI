@@ -1,4 +1,5 @@
 # TodoAPI
+Todo loyihasi uchun djangoda yozilgan rest api
 
 ## O'rnatish
 

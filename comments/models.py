@@ -8,6 +8,9 @@ from .utils import cal_key
 
 class Comment(models.Model):
     class Meta:
+        indexes = [
+            models.Index(fields=["content_type", "object_id"]),
+        ]
         ordering = ['created']
         unique_together = [
             ['content_type', 'object_id', 'tcid', ]

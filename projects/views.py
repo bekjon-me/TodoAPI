@@ -9,7 +9,6 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectsSerializer
     permission_classes = [permissions.IsAuthenticated]
     lookup_field = 'upid'
-    # lookup_url_kwarg = 'upid'
 
     def get_queryset(self):
         queryset = self.request.user.projects

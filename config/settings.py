@@ -11,6 +11,17 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from environs import Env
+from .autoset_env_vars import set_default_keys, \
+    set_random_generate_secret_key
+
+# Environs settings
+env = Env()
+env.read_env()
+
+# set default keys to env file
+set_default_keys(env)
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +31,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^qb8g@d4y(q%esm$1j+t^gl!4o&nm0rs**xtm%-jon)ze(037#'
+
+set_random_generate_secret_key(env)
+SECRET_KEY = env.str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool("DEBUG", default=False)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 
 # Application definition
@@ -49,11 +62,11 @@ INSTALLED_APPS = [
     # AllAuth
     'allauth',
 
-    # Swagger doc
-    'rest_framework_swagger',
-
     # CORS
     'corsheaders',
+
+    # drf-yasg
+    'drf_yasg',
 
     # 3rd party apps
     'projects.apps.ProjectsConfig',
@@ -85,6 +98,17 @@ REST_FRAMEWORK = {
     ],
 
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+        'rest_framework.parsers.FileUploadParser',
+    ],
+
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
 }
 
 ROOT_URLCONF = 'config.urls'
@@ -101,7 +125,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            'libraries' : {
+            'libraries': {
                 'staticfiles': 'django.templatetags.static',
             },
         },
@@ -129,16 +153,21 @@ LOGOUT_URL = '/rest-auth/logout/'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.'.__add__(
+            'UserAttributeSimilarityValidator',)
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -167,3 +196,18 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Swagger
+SPECTACULAR_SETTINGS = {
+    'COMPONENT_SPLIT_REQUEST': True
+}
+
+# Redoc
+REDOC_SETTINGS = {
+    'LAZY_RENDERING': True,
+    'HIDE_HOSTNAME': True,
+    'PATH_IN_MIDDLE': True,
+    'NATIVE_SCROLLBARS': True,
+    # 'REQUIRED_PROPS_FIRST': True,
+}

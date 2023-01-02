@@ -5,5 +5,5 @@ urlpatterns = [
     # 3rd party apps path
     path('projects/', include('projects.urls')),
     path('projects/', include('tasks.urls')),
-    # path('comments/', include('comments.urls', namespace='comments')),
+    path('projects/', include('comments.urls')),
 ]

@@ -7,7 +7,7 @@ from .models import Task, SubTask, AttachedFile
 class AFInlineAdmin(GenericTabularInline):
     model = AttachedFile
     extra = 1
-    readonly_fields = ['ofid', ]
+    readonly_fields = ['tfid', ]
 
 
 @admin.register(Task)
@@ -68,23 +68,23 @@ class SubTaskAdmin(admin.ModelAdmin):
     inlines = [AFInlineAdmin, ]
 
     list_display = (
-        'tstid', 'task',
+        'tsid', 'task',
         'title', 'description',
         'created', 'updated',
         'beginning', 'completion',
         'importance', 'current_status',
     )
 
-    list_display_links = ('tstid', 'title',)
+    list_display_links = ('tsid', 'title',)
 
-    readonly_fields = ('tstid', 'task', 'created', 'updated',)
-    add_readonly_fields = ('tstid', 'created', 'updated',)
+    readonly_fields = ('tsid', 'task', 'created', 'updated',)
+    add_readonly_fields = ('tsid', 'created', 'updated',)
 
     fieldsets = [
         ('Project', {'fields': ['task', ]},),
         ('Task information', {
             'fields': [
-                'tstid', 'title', 'description',
+                'tsid', 'title', 'description',
                 'beginning', 'completion',
                 'importance', 'current_status',
             ]
@@ -102,7 +102,7 @@ class SubTaskAdmin(admin.ModelAdmin):
         },),
     ]
 
-    search_fields = ['tstid', 'title', ]
+    search_fields = ['tsid', 'title', ]
 
     def get_readonly_fields(self, request, obj=None):
         if not obj:
@@ -119,15 +119,15 @@ class SubTaskAdmin(admin.ModelAdmin):
 class AttachedFileAdmin(admin.ModelAdmin):
     list_display = (
         'content_type', 'object_id', 'content_object',
-        'ofid', 'name', 'info', 'attached_file',
+        'tfid', 'name', 'info', 'attached_file',
         'created', 'updated',
     )
 
-    list_display_links = ('ofid', 'name', 'attached_file',)
+    list_display_links = ('tfid', 'name', 'attached_file',)
 
     readonly_fields = ('content_type', 'object_id', 'content_object',
-                       'ofid', 'created', 'updated',)
-    add_readonly_fields = ('ofid', 'created', 'updated',)
+                       'tfid', 'created', 'updated',)
+    add_readonly_fields = ('tfid', 'created', 'updated',)
 
     fieldsets = [
         ('Task', {
@@ -136,7 +136,7 @@ class AttachedFileAdmin(admin.ModelAdmin):
             ]
         },),
         ('Object - file id', {
-            'fields': ['ofid', ]
+            'fields': ['tfid', ]
         },),
         ('File information', {
             'fields': [

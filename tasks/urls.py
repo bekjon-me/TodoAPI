@@ -24,14 +24,14 @@ urlpatterns = [
     path('<int:upid>/tasks/<int:ptid>/files/',
          AttachedFileViewSet.as_view(
              {'get': 'list', 'post': 'create'}), name='task-files-list'),
-    path('<int:upid>/tasks/<int:ptid>/files/<int:ofid>/',
+    path('<int:upid>/tasks/<int:ptid>/files/<int:tfid>/',
          AttachedFileViewSet.as_view(
              {'get': 'retrieve',
               'put': 'update',
               'patch': 'partial_update',
               'delete': 'destroy'}), name='task-file-detail'),
     # file download
-    path('<int:upid>/tasks/<int:ptid>/files/<int:ofid>/download/',
+    path('<int:upid>/tasks/<int:ptid>/files/<int:tfid>/download/',
          AttachedFileDownloadViewSet.as_view(
              {'get': 'retrieve'}), name='task-file-download'),
 
@@ -39,24 +39,24 @@ urlpatterns = [
     path('<int:upid>/tasks/<int:ptid>/subtasks/',
          SubTaskViewSet.as_view(
              {'get': 'list', 'post': 'create'}), name='subtasks-list'),
-    path('<int:upid>/tasks/<int:ptid>/subtasks/<int:tstid>/',
+    path('<int:upid>/tasks/<int:ptid>/subtasks/<int:tsid>/',
          SubTaskViewSet.as_view(
              {'get': 'retrieve',
               'put': 'update',
               'patch': 'partial_update',
               'delete': 'destroy'}), name='subtask-detail'),
     # subtask attached files views
-    path('<int:upid>/tasks/<int:ptid>/subtasks/<int:tstid>/files/',
+    path('<int:upid>/tasks/<int:ptid>/subtasks/<int:tsid>/files/',
          AttachedFileViewSet.as_view(
              {'get': 'list', 'post': 'create'}), name='subtask-files-list'),
-    path('<int:upid>/tasks/<int:ptid>/subtasks/<int:tstid>/files/<int:ofid>/',
+    path('<int:upid>/tasks/<int:ptid>/subtasks/<int:tsid>/files/<int:tfid>/',
          AttachedFileViewSet.as_view(
              {'get': 'retrieve',
               'put': 'update',
               'patch': 'partial_update',
               'delete': 'destroy'}), name='subtask-file-detail'),
     # file download
-    path('<int:upid>/tasks/<int:ptid>/subtasks/<int:tstid>/files/<int:ofid>/download/',
+    path('<int:upid>/tasks/<int:ptid>/subtasks/<int:tsid>/files/<int:tfid>/download/',
          AttachedFileDownloadViewSet.as_view(
              {'get': 'retrieve'}), name='subtask-file-download'),
 ]

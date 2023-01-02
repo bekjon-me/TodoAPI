@@ -5,23 +5,24 @@ from .utils import cal_key
 
 
 class Project(models.Model):
+    class Meta:
+        ordering = ['upid']
+        unique_together = ['upid', 'user']
+
     "Model for Projects"
     upid = models.PositiveIntegerField()  # user-project-id
     user = models.ForeignKey(
-        User, related_name='projects', on_delete=models.CASCADE)
+        User, on_delete=models.CASCADE, related_name='projects')
 
     name = models.CharField(max_length=50)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        unique_together = ['upid', 'user']
-
     def __str__(self) -> str:
         return str(
-            f"User:{self.user} ID:{self.upid} Name:{self.name} "
-            f"(Date:{self.created.strftime('%m/%d/%Y|%H:%M:%S')})"
+            f"USER:{self.user} UPID:{self.upid} NAME:{self.name} "
+            # f"(Date:{self.created.strftime('%m/%d/%Y|%H:%M:%S')})"
         )
 
     def save(self, *args, **kwargs):

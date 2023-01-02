@@ -5,13 +5,13 @@ from .models import Task, SubTask, AttachedFile
 class AttachedFileSubSerializer(serializers.ModelSerializer):
     class Meta:
         model = AttachedFile
-        fields = ['ofid', 'name', ]
+        fields = ['tfid', 'name', ]
 
 
 class SubTaskSubSerizlizer(serializers.ModelSerializer):
     class Meta:
         model = SubTask
-        fields = ['tstid', 'title', ]
+        fields = ['tsid', 'title', ]
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -43,7 +43,7 @@ class SubTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubTask
         fields = [
-            'tstid', 'task',
+            'tsid', 'task',
             'title', 'description',
             'created', 'updated',
             'beginning', 'completion',
@@ -52,7 +52,7 @@ class SubTaskSerializer(serializers.ModelSerializer):
         ]
 
         read_only_fields = [
-            'tstid', 'task',
+            'tsid', 'task',
             'created', 'updated',
         ]
 
@@ -60,19 +60,26 @@ class SubTaskSerializer(serializers.ModelSerializer):
 class AttachedFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = AttachedFile
-        fields = ['ofid',
+        fields = ['tfid',
                   'name', 'info', 'attached_file',
                   'created', 'updated', ]
-        read_only_fields = ['ofid', 'created', 'updated', ]
+        read_only_fields = ['tfid', 'created', 'updated', ]
 
     def to_representation(self, instance):
         representation = super(
             AttachedFileSerializer, self).to_representation(instance)
-        attached_file_url = str(self.context.get(
-            'request').build_absolute_uri())
+        attached_file_url = str(
+            self.context.get('request').build_absolute_uri())
         if attached_file_url[-2] == 's':
-            attached_file_url += f"{instance.ofid}/download/"
+            attached_file_url += f"{instance.tfid}/download/"
         else:
             attached_file_url += "download/"
         representation['attached_file'] = attached_file_url
         return representation
+
+
+class AttachedFileDownloadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AttachedFile
+        fields = ['attached_file', ]
+        read_only_fields = ['attached_file', ]

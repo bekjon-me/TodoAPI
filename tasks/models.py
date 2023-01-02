@@ -3,7 +3,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey, \
     GenericRelation
 from projects.models import Project
-from tasks.utils import cal_key
+from comments.models import Comment
+from .utils import cal_key
 # Create your models here.
 
 
@@ -17,6 +18,8 @@ class BaseTask(models.Model):
     description = models.TextField()
 
     attached_files = GenericRelation('AttachedFile')
+
+    comments = GenericRelation(Comment)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -43,20 +46,20 @@ class BaseTask(models.Model):
 
 
 class Task(BaseTask):
-
     class Meta:
+        ordering = ['ptid']
         unique_together = [
             ['project', 'ptid'],
-            ['project', 'title'],
+            # ['project', 'title'],
         ]
 
-    ptid = models.PositiveIntegerField()  # project-task-id
+    ptid = models.PositiveIntegerField()  # project-task_id
     project = models.ForeignKey(
         Project, related_name='tasks', on_delete=models.CASCADE)
 
     def __str__(self):
         return str(
-            f"Project:{self.project.name} PTID:{self.ptid} Name:{self.title}"
+            f"UPID:{self.project.upid} PTID:{self.ptid} NAME:{self.title}"
         )
 
     def save(self, *args, **kwargs):
@@ -68,28 +71,37 @@ class Task(BaseTask):
 
 class SubTask(BaseTask):
     class Meta:
+        ordering = ['tsid']
         unique_together = [
-            ['task', 'tstid'],
-            ['task', 'title'],
+            ['task', 'tsid'],
+            # ['task', 'title'],
         ]
 
-    tstid = models.PositiveIntegerField()  # task-sub-task-id
+    tsid = models.PositiveIntegerField()  # task-subtask_id
     task = models.ForeignKey(
         Task, related_name='subtasks', on_delete=models.CASCADE)
 
     def __str__(self):
         return str(
-            f"Task:{self.task.title} TSTID:{self.tstid} Name:{self.title}"
+            f"PTID:{self.task.ptid} TSID:{self.tsid} NAME:{self.title}"
         )
 
     def save(self, *args, **kwargs):
         if self._state.adding is True:
-            tstid = cal_key(self.task, SubTask)
-            self.tstid = tstid
+            tsid = cal_key(self.task, SubTask)
+            self.tsid = tsid
         return super(SubTask, self).save(*args, **kwargs)
 
 
 class AttachedFile(models.Model):
+    class Meta:
+        indexes = [
+            models.Index(fields=["content_type", "object_id"]),
+        ]
+        ordering = ['tfid']
+        unique_together = [
+            ['content_type', 'object_id', 'tfid'],
+        ]
 
     TASK_TYPE = (
         models.Q(
@@ -99,7 +111,7 @@ class AttachedFile(models.Model):
         )
     )
 
-    ofid = models.PositiveIntegerField()  # Object-file_id
+    tfid = models.PositiveIntegerField()  # task-file_id
     name = models.CharField(max_length=30, blank=True, null=True)
     info = models.TextField(max_length=70, blank=True, null=True)
     attached_file = models.FileField(upload_to='attached_files/')
@@ -113,21 +125,16 @@ class AttachedFile(models.Model):
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
 
-    class Meta:
-        indexes = [
-            models.Index(fields=["content_type", "object_id"]),
-        ]
-
     def __str__(self):
         return str(
-            f"{self.name} - {self.object_id} - {self.content_object}"
-            f" - {self.ofid}"
+            f"OBJECT:[{self.content_object}] TFID:{self.tfid} "
+            f"NAME:{self.name}"
         )
 
     def save(self, *args, **kwargs):
         if self._state.adding is True:
-            ofid = cal_key(
+            tfid = cal_key(
                 self.content_object, AttachedFile,
                 self.content_type, self.object_id)
-            self.ofid = ofid
+            self.tfid = tfid
         return super(AttachedFile, self).save(*args, **kwargs)

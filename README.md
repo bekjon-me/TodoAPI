@@ -3,7 +3,6 @@ Todo loyihasi uchun djangoda yozilgan rest api
 
 ## Mos keladigan python versiyalari
 Python 3.6, 3.7, 3.8, 3.9 va 3.10
-
 3.10 - versiya tavfsiya qilinadi
 
 ## Virtual muhitni yaratish

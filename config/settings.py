@@ -12,14 +12,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 from environs import Env
-import auto_configure
+from auto_configure import set_random_generate_secret_key
 
 # Environs settings
 env = Env()
 env.read_env()
-
-# auto configure
-auto_configure.auto_configure(env)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 
 if env.str("SECRET_KEY", True):
-    auto_configure.set_random_generate_secret_key(env)
+    set_random_generate_secret_key(env)
 SECRET_KEY = env.str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -41,7 +38,7 @@ DEBUG = env.bool("DEBUG", False)
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 # Site configuration
-SITE_ID = env.int('SITE_ID', 0)
+SITE_ID = env.int('SITE_ID', 1)
 
 # Application definition
 

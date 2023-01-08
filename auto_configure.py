@@ -5,8 +5,10 @@ Command:
 """
 from django.core.management.utils import get_random_secret_key
 from django.contrib.auth import get_user_model
-from django.contrib.sites.models import Site
+from django.apps import apps
+
 import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
 
 # autoset envs
@@ -52,10 +54,11 @@ def autoCreateSuperUser():
 
 
 def autoCreateDjangoSite():
-    sites = Site.objects.all()
-    example_site = Site.objects.filter(name='example.com')
+    site_model = apps.get_model('sites', 'Site')
+    sites = site_model.objects.all()
+    example_site = site_model.objects.filter(name='example.com')
     if not sites.exists() or (example_site.exists() and sites.count() == 1):
-        new_site = Site.objects.create(
+        new_site = site_model.objects.create(
             domain='127.0.0.1:8000', name='127.0.0.1:8000')
         if new_site.id:
             print(f'Saccessful create site -> {new_site.name}')
@@ -71,4 +74,4 @@ def autoCreateDjangoSite():
 def auto_configure(env):
     set_default_keys(env)
     autoCreateSuperUser()
-    autoCreateDjangoSite()
+    # autoCreateDjangoSite()

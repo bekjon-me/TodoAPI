@@ -68,10 +68,7 @@ def autoCreateDjangoSite():
             env.read_env()
 
 
-if __name__ == '__main__':
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
-
-    set_random_generate_secret_key()
-    set_default_keys()
+def auto_configure(env):
+    set_default_keys(env)
     autoCreateSuperUser()
     autoCreateDjangoSite()

@@ -12,16 +12,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 from environs import Env
-from .autoset_env_vars import set_default_keys, \
-    set_random_generate_secret_key
 
 # Environs settings
 env = Env()
 env.read_env()
-
-# set default keys to env file
-set_default_keys(env)
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,7 +26,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-set_random_generate_secret_key(env)
 SECRET_KEY = env.str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -116,7 +109,6 @@ ACCOUNT_EMAIL_REQUIRED = env.bool('ACCOUNT_EMAIL_REQUIRED', True)
 ACCOUNT_UNIQUE_EMAIL = env.bool('ACCOUNT_UNIQUE_EMAIL', True)
 ACCOUNT_EMAIL_VERIFICATION = env.str('ACCOUNT_EMAIL_VERIFICATION', 'none')
 # ACCOUNT_USERNAME_REQUIRED = env.bool('ACCOUNT_USERNAME_REQUIRED', False)
-
 
 
 MIDDLEWARE = [

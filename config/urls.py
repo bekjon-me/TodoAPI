@@ -33,7 +33,6 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=[permissions.AllowAny],
 )
-from social_rest_auth.views import googlecallback
 
 urlpatterns = [
     # admin path

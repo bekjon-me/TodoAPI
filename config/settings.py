@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-if env.str("SECRET_KEY", True):
+if env.str("SECRET_KEY", 'none') == 'none':
     set_random_generate_secret_key(env)
 SECRET_KEY = env.str("SECRET_KEY")
 

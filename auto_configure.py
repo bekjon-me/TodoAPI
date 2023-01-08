@@ -4,7 +4,7 @@ Command:
     $ python manage.py shell < auto_configure.py
 """
 from django.core.management.utils import get_random_secret_key
-# from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model
 from django.apps import apps
 
 import os

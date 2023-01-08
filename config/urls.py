@@ -33,17 +33,20 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=[permissions.AllowAny],
 )
-
+from social_rest_auth.views import googlecallback
 
 urlpatterns = [
     # admin path
     path('admin/', admin.site.urls),
 
-    # path('api-auth/', include('rest_framework.urls')),
-    path('rest-auth/', include('rest_auth.urls')),
-    path('rest-auth/registration', include('rest_auth.registration.urls')),
+    # dj-rest-auth login and register path
+    path('api/auth/', include('dj_rest_auth.urls')),
+    path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
 
-    # documentation path
+    # social auth path
+    path('api/auth/', include('social_rest_auth.urls')),
+
+    # swagger path
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0), name='schema-json'),
     re_path(r'^swagger/$', schema_view.with_ui(
@@ -51,8 +54,8 @@ urlpatterns = [
     re_path(r'^redoc/$', schema_view.with_ui(
         'redoc', cache_timeout=0), name='schema-redoc'),
 
-    # api
-    path('api-v1/', include('config.api_urls'))
+    # api-v1 main project path
+    path('api-v1/', include('config.api_urls')),
 ]
 
 if settings.DEBUG:

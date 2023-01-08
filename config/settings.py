@@ -36,10 +36,13 @@ set_random_generate_secret_key(env)
 SECRET_KEY = env.str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DEBUG", default=False)
+DEBUG = env.bool("DEBUG", False)
 
+# Allowed hosts
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
+# Site configuration
+SITE_ID = env.int('SITE_ID', 0)
 
 # Application definition
 
@@ -51,16 +54,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Rest
-    'rest_framework.apps.RestFrameworkConfig',
+    # django sites
+    'django.contrib.sites',
+
+    # Rest framework
+    'rest_framework',
     'rest_framework.authtoken',
 
-    # rest_auth
-    'rest_auth',
-    'rest_auth.registration',
+    # dj_rest_auth
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
 
     # AllAuth
     'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 
     # CORS
     'corsheaders',
@@ -69,10 +78,46 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     # 3rd party apps
-    'projects.apps.ProjectsConfig',
+    'projects',
     'tasks',
     'comments',
+
+    # social rest auth
+    'social_rest_auth',
 ]
+
+# Email auth required
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Allauth settings
+# AUTHENTICATION_BACKENDS = [
+#     "django.contrib.auth.backends.ModelBackend",
+#     'allauth.account.auth_backends.AuthenticationBackend',
+# ]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
+# SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
+# SOCIALACCOUNT_EMAIL_REQUIRED = False
+
+ACCOUNT_AUTHENTICATION_METHOD = env.str(
+    'ACCOUNT_AUTHENTICATION_METHOD', 'email')
+ACCOUNT_EMAIL_REQUIRED = env.bool('ACCOUNT_EMAIL_REQUIRED', True)
+ACCOUNT_UNIQUE_EMAIL = env.bool('ACCOUNT_UNIQUE_EMAIL', True)
+ACCOUNT_EMAIL_VERIFICATION = env.str('ACCOUNT_EMAIL_VERIFICATION', 'none')
+# ACCOUNT_USERNAME_REQUIRED = env.bool('ACCOUNT_USERNAME_REQUIRED', False)
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -85,16 +130,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CORS_ORIGIN_ALLOW_ALL = True
+
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.IsAuthenticated'
     ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ],
 
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
@@ -110,6 +156,10 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
 }
+
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'jwt-auth'
+
 
 ROOT_URLCONF = 'config.urls'
 
@@ -145,8 +195,8 @@ DATABASES = {
     }
 }
 
-LOGIN_URL = '/rest-auth/login/'
-LOGOUT_URL = '/rest-auth/logout/'
+LOGIN_URL = '/api/auth/login/'
+LOGOUT_URL = '/api/auth/logout/'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -211,3 +261,7 @@ REDOC_SETTINGS = {
     'NATIVE_SCROLLBARS': True,
     # 'REQUIRED_PROPS_FIRST': True,
 }
+
+# Login and Logout
+LOGIN_REDIRECT_URL = '/api-v1/projects/'
+LOGOUT_REDIRECT_URL = '/auth/login/'

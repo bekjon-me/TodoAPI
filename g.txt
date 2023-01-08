@@ -1,0 +1,12 @@
+access_token = ya29.a0AX9GBdVOhqyUNU9mBaRS3YRGZ9V6Ln0kOm8EpKlpZzsHLVT9XOk8p8vN_m6nle0VOfPxihLJS_-I4NqyI2GdXgiDN6eDjH0HNFnt_4BKbUegfQHYdytTy528e3s1Suv6ZT8NdIF9elr6FgSsAgjUa9KxpbW_WwaCgYKAXQSARMSFQHUCsbCw4sNvf04RXc2tYMnKTuRAw0165
+
+code = 40AWgavdfnGgB7T8qXVTD_BRGU_akQBh568KNXiTEl4r0ByKomLIp6Rx_x7dy1XVeUb9lbFQ
+
+
+url = https://accounts.google.com/o/oauth2/v2/auth?client_id=862833126606-6va6jb566hja2vkraog5nravem4dd950.apps.googleusercontent.com&redirect_uri=http://127.0.0.1:8000/auth/google/login/callback/&response_type=token&scope=openid%20profile%20email
+
+
+https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=<CALLBACK_URL_YOU_SET_ON_GOOGLE>&prompt=consent&response_type=token&client_id=<YOUR CLIENT ID>&scope=openid%20email%20profile
+
+https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=<CALLBACK_URL_YOU_SET_ON_GOOGLE>&prompt=consent&response_type=token&client_id=<YOUR CLIENT ID>&scope=openid%20email%20profile
+

@@ -40,15 +40,15 @@ pip install -r requirements.txt
 ```
 
 
-## Admin panelga kirish uchun superuser yaratish
+## Database yaratish va ilovalarni migratsiyalash
 ```console
-python manage.py createsuperuser
+python manage.py migrate
 ```
 
 
-## Database yaratish
+## Automatik konfiguratsiyani ishga tushirish
 ```console
-python manage.py migrate
+python manage.py runscript -v3 auto_configure
 ```
 
 
@@ -56,3 +56,13 @@ python manage.py migrate
 ```console
 python manage.py runserver
 ```
+
+## Default qiymatlar
+Admin panelga kirish uchun superuser ma'lumotlari
+```console
+username = superuser
+password = superuser
+```
+
+## Google oauth2 ni sozlash
+(GoogleOauth2.md)[https://github.com/Jahongir-Qurbonov/TodoAPI/blob/main/GoogleOauth2.md] ga qarang

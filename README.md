@@ -65,4 +65,4 @@ password = superuser
 ```
 
 ## Google oauth2 ni sozlash
-(GoogleOauth2.md)[https://github.com/Jahongir-Qurbonov/TodoAPI/blob/main/GoogleOauth2.md] ga qarang
+[GoogleOauth2.md](https://github.com/Jahongir-Qurbonov/TodoAPI/blob/main/GoogleOauth2.md) ga qarang

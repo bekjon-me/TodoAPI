@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 from environs import Env
-from auto_configure import set_random_generate_secret_key
 
 # Environs settings
 env = Env()
@@ -27,8 +26,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-if env.str("SECRET_KEY", 'none') == 'none':
-    set_random_generate_secret_key(env)
 SECRET_KEY = env.str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!

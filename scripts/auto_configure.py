@@ -1,7 +1,7 @@
 """
-Command:
+run:
 
-    $ python manage.py shell < auto_configs/auto_configure.py
+    $ python manage.py runscript -v3 auto_configure
 """
 
 

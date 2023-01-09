@@ -13,13 +13,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from environs import Env
 
-# Environs settings
-env = Env()
-env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Environs settings
+env = Env()
+env.read_env()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -32,7 +32,7 @@ SECRET_KEY = env.str("SECRET_KEY")
 DEBUG = env.bool("DEBUG", False)
 
 # Allowed hosts
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", ['localhost', '127.0.0.1:8000'])
 
 # Site configuration
 SITE_ID = env.int('SITE_ID', 1)
@@ -77,6 +77,9 @@ INSTALLED_APPS = [
 
     # social rest auth
     'social_rest_auth',
+
+    # django extensions
+    'django_extensions',
 ]
 
 # Email auth required

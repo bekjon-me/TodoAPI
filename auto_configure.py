@@ -3,10 +3,6 @@ Command:
 
     $ python manage.py shell < auto_configure.py
 """
-from django.core.management.utils import get_random_secret_key
-from django.contrib.auth import get_user_model
-from django.contrib.sites.models import Site
-from config.settings import env
 
 
 # autoset envs
@@ -14,6 +10,8 @@ def set_random_generate_secret_key(env):
     try:
         env.str("SECRET_KEY")
     except:
+        from django.core.management.utils import get_random_secret_key
+
         secret_key = get_random_secret_key()
         with open("./.env", "a+") as envfile:
             envfile.write(f"SECRET_KEY='{secret_key}'\n")
@@ -42,16 +40,20 @@ def set_default_keys(env):
 
 
 def autoCreateSuperUser():
+    from django.contrib.auth import get_user_model
+
     user_model = get_user_model()
     super_users = user_model.objects.filter(is_superuser=True)
     if not super_users:
-        super_uer = user_model.create_superuser(
+        super_user = user_model.create_superuser(
             username='superuser', password='superuser')
         if super_user.id:
-            print(f'Successful create superuser -> {superuser.username}')
+            print(f'Successful create superuser -> {super_user.username}')
 
 
 def autoCreateDjangoSite():
+    from django.contrib.sites.models import Site
+
     sites = Site.objects.all()
     example_site = Site.objects.filter(name='example.com')
     if not sites.exists() or (example_site.exists() and sites.count() == 1):
@@ -75,4 +77,7 @@ def auto_configure(env):
     autoCreateDjangoSite()
 
 
-auto_configure(env)
+if __name__ == '__main__':
+    from config.settings import env
+
+    auto_configure(env)

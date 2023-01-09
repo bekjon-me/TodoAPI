@@ -18,6 +18,7 @@ def set_random_generate_secret_key(env):
             print("Create SECRET_KEY variable in .env")
         env.read_env()
 
+        return secret_key
 
 def set_default_keys(env):
     # ALLOWED_HOSTS
@@ -70,7 +71,7 @@ def autoCreateDjangoSite(env):
 
 
 def auto_configure(env):
-    set_random_generate_secret_key(env)
+    # set_random_generate_secret_key(env)
     set_default_keys(env)
     autoCreateSuperUser()
     autoCreateDjangoSite(env)

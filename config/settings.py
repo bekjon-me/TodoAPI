@@ -26,7 +26,12 @@ env.read_env()
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = env.str("SECRET_KEY")
+try:
+    SECRET_KEY = env.str("SECRET_KEY")
+except:
+    from scripts.auto_configure import set_random_generate_secret_key
+    SECRET_KEY = set_random_generate_secret_key(env)
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", False)

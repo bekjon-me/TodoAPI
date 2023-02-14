@@ -20,6 +20,7 @@ def set_random_generate_secret_key(env):
 
         return secret_key
 
+
 def set_default_keys(env):
     # ALLOWED_HOSTS
     try:

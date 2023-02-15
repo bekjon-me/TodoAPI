@@ -282,5 +282,4 @@ poetry.toml
 
 # Custom
 # Staticfiles
-staticfiles/
-templates/
+staticfiles/*

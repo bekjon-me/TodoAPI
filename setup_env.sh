@@ -23,5 +23,6 @@ configure(){
   source venv/bin/activate
   python manage.py migrate
   python manage.py runscript -v3 auto_configure
+  python manage.py collectstatic
 }
 configure

@@ -278,3 +278,8 @@ poetry.toml
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/python,django,visualstudiocode
+
+
+# Custom
+# Staticfiles
+staticfiles/*

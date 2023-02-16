@@ -70,6 +70,7 @@ if settings.DEBUG:
             RedirectView.as_view(url="/static/favicon.ico"),
         )
     )
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 # else:
-#     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 #     urlpatterns += staticfiles_urlpatterns()

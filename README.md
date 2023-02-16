@@ -60,14 +60,14 @@ python manage.py runscript -v3 auto_configure
 ## `Gunicorn` setup
 
 ```bash
-nano /etc/systemd/system/gunicorn_advancedTodo.socket
+nano /etc/systemd/system/gunicorn_TodoAPI.socket
 ```
 
 ```ignorelang
 [Unit]
-Description=advancedTodo gunicorn socket
+Description=TodoAPI gunicorn socket
 [Socket]
-ListenStream=/run/gunicorn_advancedTodo.sock
+ListenStream=/run/gunicorn_TodoAPI.sock
 [Install]
 WantedBy=sockets.target
 ```
@@ -75,22 +75,22 @@ WantedBy=sockets.target
 and
 
 ```bash
-nano /etc/systemd/system/gunicorn_advancedTodo.service
+nano /etc/systemd/system/gunicorn_TodoAPI.service
 ```
 
 ```ignorelang
 [Unit]
 Description=gunicorn daemon
-Requires=gunicorn_advancedTodo.socket
+Requires=gunicorn_TodoAPI.socket
 After=network.target
 [Service]
 User=root
 Group=www-data
-WorkingDirectory=/root/advancedTodo/server
-ExecStart=/root/advancedTodo/server/venv/bin/gunicorn \
+WorkingDirectory=/home/ecs-user/TodoAPI
+ExecStart=/home/ecs-user/TodoAPI/venv/bin/gunicorn \
     --access-logfile -  \
     --workers 3 \
-    --bind unix:/run/gunicorn_advancedTodo.sock
+    --bind unix:/run/gunicorn_TodoAPI.sock \
     config.wsgi:application
 [Install]
 WantedBy=multi-user.target
@@ -100,29 +100,29 @@ and
 
 ```bash
 # Save and close the file then set proper permission to the Django project directory
-$ chown -R www-data:root ~/advancedTodo
+$ chown -R www-data:ecs-user ~/TodoAPI
 
 # reload systemd daemon
 $ systemctl daemon-reload
 
-# start and enable gunicorn_advancedTodo service
-$ systemctl start gunicorn_advancedTodo.service
-$ systemctl enable gunicorn_advancedTodo.service
+# start and enable gunicorn_TodoAPI service
+$ systemctl start gunicorn_TodoAPI.service
+$ systemctl enable gunicorn_TodoAPI.service
 # check 
-$ systemctl status gunicorn_advancedTodo
+$ systemctl status gunicorn_TodoAPI
 ```
 
 ## `Nginx` setup
 
 ```ignorelang
-# /etc/nginx/conf.d//advancedTodo.conf
+# /etc/nginx/conf.d/TodoAPI.conf
 # This configuration will be changed to redirect to HTTPS later
 server {
   server_name               server_adress;
   listen                    80;
   location / {
     include proxy_params;
-    proxy_pass http://unix:/run/gunicorn_advancedTodo.sock;
+    proxy_pass http://unix:/run/gunicorn_TodoAPI.sock;
   }
 }
 ```

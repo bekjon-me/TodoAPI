@@ -15,7 +15,7 @@ def set_random_generate_secret_key(env):
         secret_key = get_random_secret_key()
         with open("./.env", "a+") as envfile:
             envfile.write(f"SECRET_KEY='{secret_key}'\n")
-            print("Create SECRET_KEY variable in .env")
+            print("===> Create SECRET_KEY variable in .env")
         env.read_env()
 
         return secret_key
@@ -28,7 +28,7 @@ def set_default_keys(env):
     except:
         with open("./.env", "a+") as envfile:
             envfile.write("ALLOWED_HOSTS=localhost,127.0.0.1\n")
-            print("Create ALLOWED_HOSTS variable in .env")
+            print("===> Create ALLOWED_HOSTS variable in .env")
         env.read_env()
 
     # DEBUG
@@ -37,7 +37,7 @@ def set_default_keys(env):
     except:
         with open("./.env", "a+") as envfile:
             envfile.write("DEBUG=false\n")
-            print("Create DEBUG variable in .env")
+            print("===> Create DEBUG variable in .env")
         env.read_env()
 
 
@@ -49,7 +49,7 @@ def autoCreateSuperUser():
         super_user = user_model.objects.create_superuser(
             username='superuser', password='superuser')
         if super_user.id:
-            print('Successful create default superuser')
+            print("===> Successful create default superuser")
 
 
 def autoCreateDjangoSite(env):
@@ -61,18 +61,19 @@ def autoCreateDjangoSite(env):
         new_site = Site.objects.create(
             domain='127.0.0.1:8000', name='127.0.0.1:8000')
         if new_site.id:
-            print(f'Saccessful create site -> {new_site.name}')
+            print(f'===> Saccessful create site -> {new_site.name}')
             try:
                 env.int("SITE_ID")
             except:
                 with open("./.env", "a+") as envfile:
                     envfile.write(f"SITE_ID={new_site.id}\n")
-                    print("Create SITE_ID variable in .env")
+                    print("===> Create SITE_ID variable in .env")
                 env.read_env()
 
 
 def auto_configure(env):
-    # set_random_generate_secret_key(env)
+    # set_random_generate_secret_key(env) # this migrated to settings.py
+
     set_default_keys(env)
     autoCreateSuperUser()
     autoCreateDjangoSite(env)

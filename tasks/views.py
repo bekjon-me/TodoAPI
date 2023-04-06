@@ -108,7 +108,7 @@ class AttachedFileDownloadViewSet(
         # return Response(serializer.data)
         file = self.get_object().attached_file
         response = RangedFileResponse(request, file.file.open("rb"))
-        response['Content-Disposition'] = 'attachment; filename="%s"' % file.filename
+        response['Content-Disposition'] = 'attachment; filename="%s"' % file.file.filename
         return response
 
     def get_queryset(self):

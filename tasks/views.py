@@ -2,6 +2,7 @@ from rest_framework import viewsets, permissions, mixins
 from django.db.models import QuerySet
 from django.http import FileResponse
 from django.contrib.contenttypes.models import ContentType
+from ranged_fileresponse import RangedFileResponse
 from .serializers import TaskSerializer, SubTaskSerializer, \
     AttachedFileSerializer, AttachedFileDownloadSerializer
 from .models import Task, SubTask
@@ -105,8 +106,10 @@ class AttachedFileDownloadViewSet(
         # instance = self.get_object()
         # serializer = self.get_serializer(instance)
         # return Response(serializer.data)
-        instance = self.get_object()
-        return FileResponse(instance.attached_file.file)
+        file = self.get_object().attached_file.file
+        response = RangedFileResponse(request, file.open("rb"))
+        response['Content-Disposition'] = 'attachment; filename="%s"' % file.filename
+        return response
 
     def get_queryset(self):
         if 'tsid' in self.kwargs:

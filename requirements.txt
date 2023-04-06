@@ -15,6 +15,7 @@ django-allauth==0.52.0
 django-cache-url==3.4.4
 django-cors-headers==3.13.0
 django-extensions==3.2.1
+django-ranged-fileresponse==0.1.2
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.2.2
 drf-yasg==1.21.4
